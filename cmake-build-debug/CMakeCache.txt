@@ -15,10 +15,10 @@
 ########################
 
 //Value Computed by CMake
-Assignment1_BINARY_DIR:STATIC=/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug
+Assignment1_BINARY_DIR:STATIC=/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/src
 
 //Value Computed by CMake
-Assignment1_SOURCE_DIR:STATIC=/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1
+Assignment1_SOURCE_DIR:STATIC=/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/src
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
@@ -333,7 +333,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

@@ -100,14 +100,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles" "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles/progress.marks"
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(CMAKE_COMMAND) -E cmake_progress_start "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles" "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/src/CMakeFiles/progress.marks"
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clean
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -117,31 +117,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 preinstall
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named Assignment1
+# Convenience name for target.
+src/CMakeFiles/Assignment1.dir/rule:
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 src/CMakeFiles/Assignment1.dir/rule
+.PHONY : src/CMakeFiles/Assignment1.dir/rule
 
-# Build rule for target.
-Assignment1: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Assignment1
+# Convenience name for target.
+Assignment1: src/CMakeFiles/Assignment1.dir/rule
+
 .PHONY : Assignment1
 
 # fast build rule for target.
 Assignment1/fast:
-	$(MAKE) $(MAKESILENT) -f src/CMakeFiles/Assignment1.dir/build.make src/CMakeFiles/Assignment1.dir/build
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Assignment1.dir/build.make src/CMakeFiles/Assignment1.dir/build
 .PHONY : Assignment1/fast
+
+Main.o: Main.cpp.o
+
+.PHONY : Main.o
+
+# target to build an object file
+Main.cpp.o:
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Assignment1.dir/build.make src/CMakeFiles/Assignment1.dir/Main.cpp.o
+.PHONY : Main.cpp.o
+
+Main.i: Main.cpp.i
+
+.PHONY : Main.i
+
+# target to preprocess a source file
+Main.cpp.i:
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Assignment1.dir/build.make src/CMakeFiles/Assignment1.dir/Main.cpp.i
+.PHONY : Main.cpp.i
+
+Main.s: Main.cpp.s
+
+.PHONY : Main.s
+
+# target to generate assembly for a file
+Main.cpp.s:
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(MAKE) $(MAKESILENT) -f src/CMakeFiles/Assignment1.dir/build.make src/CMakeFiles/Assignment1.dir/Main.cpp.s
+.PHONY : Main.cpp.s
 
 # Help Target
 help:
@@ -152,6 +181,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Assignment1"
+	@echo "... Main.o"
+	@echo "... Main.i"
+	@echo "... Main.s"
 .PHONY : help
 
 
@@ -163,6 +195,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd "/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug" && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
