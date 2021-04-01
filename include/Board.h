@@ -8,22 +8,31 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
+#include <list>
+#include "Cell.h"
+
 class Board {
 private:
 	int boardSize;
 	int turn;
 	int **grid;
+	list<Cell> emptyCells;
 public:
 	Board(int bs) {
 		boardSize = bs;
 		grid = new int*[boardSize];
-		for (int i = 0; i < boardSize; i++)
+		for (int i = 0; i < boardSize; i++) {
 			grid[i] = new int[boardSize];
+		}
 
-		for (int i = 0; i < boardSize; i++)
+		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				grid[i][j] = 0;
+				//Insert grid cell into list of empty cells as all new board cells will all be empty
+				emptyCells.push_front(Cell{i, j});
 			}
+		}
+
 		turn = 1;
 	}
 
@@ -49,8 +58,11 @@ public:
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++) {
 				grid[i][j] = cboard.getGrid(i, j);
+				//Add empty cells to list
+				if (grid[i][j] == 0) {
+					emptyCells.push_front(Cell{i, j});
+				}
 			}
-
 		turn = cboard.getTurn();
 	}
 
@@ -69,6 +81,10 @@ public:
 	bool validInput(int, int);
 
 	bool addMove(int playerType, int x, int y);
+
+	void removeEmptyCell(int x, int y);
+
+	bool isBoardFull();
 
 	int checkWinningStatus(int playerType) {
 		//To be implemented
@@ -108,6 +124,15 @@ bool Board::addMove(int playerType, int x, int y) {
 
 	turn = -1 * turn;
 	return true;
+}
+
+//Removes a cell from the emptyCells member
+void Board::removeEmptyCell(int x, int y) {
+	emptyCells.remove(Cell{x, y});
+}
+
+bool Board::isBoardFull() {
+	return !(emptyCells.size());
 }
 
 void Board::printBoard() {

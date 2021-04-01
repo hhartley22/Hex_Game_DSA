@@ -27,7 +27,6 @@ void HexGame::play() {
 	board->printBoard();
 
 	while (!won) {
-
 		int playerType = board->getTurn();
 		int playerIndex = (playerType == player[0]->getType()) ? 0 : 1;
 		int x = -1;
@@ -44,10 +43,17 @@ void HexGame::play() {
 		if (!board->addMove(playerType, x, y))
 			return;
 
+		board->removeEmptyCell(x, y);
 		board->printBoard();
 		won = board->checkWinningStatus(playerType);
         if(won == playerType)
         	cout << player[playerIndex]->getPlayerName() << " player wins!" << endl;
+
+		if (board->isBoardFull()) {
+			cout << "Board is full and game is a Draw!" << endl;
+			//Exit loop
+			break;
+		}
 
 	}
 }
