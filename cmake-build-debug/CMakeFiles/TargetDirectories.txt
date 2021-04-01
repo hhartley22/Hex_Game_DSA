@@ -1,5 +1,0 @@
-/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/src/CMakeFiles/rebuild_cache.dir
-/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/src/CMakeFiles/edit_cache.dir
-/Users/hayden/Documents/Uni/CS/Year 2 Semester 1/Data Strucures & Algoritms/Assignment/Assignment1/cmake-build-debug/src/CMakeFiles/Assignment1.dir
