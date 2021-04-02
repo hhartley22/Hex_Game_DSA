@@ -86,6 +86,8 @@ public:
 
 	bool isBoardFull();
 
+	Cell getPossibleMove();
+
 	int checkWinningStatus(int playerType) {
 		//To be implemented
 		return 0;
@@ -133,6 +135,18 @@ void Board::removeEmptyCell(int x, int y) {
 
 bool Board::isBoardFull() {
 	return !(emptyCells.size());
+}
+
+//Returns a random empty Cell from the remaining empty board cells
+Cell Board::getPossibleMove() {
+	int cellPos = rand() % emptyCells.size();
+
+	auto iterator = emptyCells.begin();
+	for (int i = 0; i < cellPos; ++i) {
+		advance(iterator, 1);
+	}
+
+	return *iterator;
 }
 
 void Board::printBoard() {

@@ -15,7 +15,7 @@ public:
 	HumanPlayer(int t, string name = "Human") :
 			Player(t, name) {
 	}
-	bool getMove(Board*, int&, int&);
+	bool getMove(Board*, int&, int&) override;
 };
 
 bool HumanPlayer::getMove(Board *board, int &x, int &y) {

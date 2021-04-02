@@ -14,6 +14,7 @@ using namespace std;
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "HexGame.h"
+#include "RandomPlayer.h"
 
 int main() {
 	int boardSize = 5;
@@ -25,7 +26,7 @@ int main() {
 	Board *board = new Board(boardSize);
 
 	Player *p1 = new HumanPlayer(1, "Human (Red)");
-	Player *p2 = new HumanPlayer(-1, "Human (Blue)");
+	Player *p2 = new RandomPlayer(-1, "Random (Blue)");
 
 	HexGame game(board, p1, p2);
 	game.play();
