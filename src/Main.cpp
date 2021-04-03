@@ -5,8 +5,9 @@
  *      Author: dongmo
  */
 
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
@@ -17,6 +18,7 @@ using namespace std;
 #include "RandomPlayer.h"
 
 int main() {
+	srand(time(0));
 	int boardSize = 5;
 	cout <<"Input the size of board:" << endl;
     cin >> boardSize;
@@ -26,7 +28,7 @@ int main() {
 	Board *board = new Board(boardSize);
 
 	Player *p1 = new HumanPlayer(1, "Human (Red)");
-	Player *p2 = new HumanPlayer(-1, "Random (Blue)");
+	Player *p2 = new RandomPlayer(-1, "Random (Blue)");
 
 	HexGame game(board, p1, p2);
 	game.play();

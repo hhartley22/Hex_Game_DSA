@@ -9,6 +9,8 @@
 #define BOARD_H_
 
 #include <list>
+#include <cstdlib>
+
 #include "Cell.h"
 
 class Board {
@@ -144,9 +146,7 @@ Cell Board::getPossibleMove() {
 	int cellPos = rand() % emptyCells.size();
 
 	auto iterator = emptyCells.begin();
-	for (int i = 0; i < cellPos; ++i) {
-		advance(iterator, 1);
-	}
+	advance(iterator, cellPos);
 
 	return *iterator;
 }
