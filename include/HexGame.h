@@ -46,6 +46,11 @@ void HexGame::play() {
 		board->removeEmptyCell(x, y);
 		board->printBoard();
 		won = board->checkWinningStatus(playerType);
+
+		if(!won) {
+			won = board->playerHasStraightLine(playerType, x, y);
+		}
+
         if(won == playerType)
         	cout << player[playerIndex]->getPlayerName() << " player wins!" << endl;
 

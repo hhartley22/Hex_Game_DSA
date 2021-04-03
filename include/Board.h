@@ -93,6 +93,8 @@ public:
 		return 0;
 	}
 
+	int playerHasStraightLine(int playerType, int row, int col);
+
 	void printBoard();
 };
 
@@ -147,6 +149,41 @@ Cell Board::getPossibleMove() {
 	}
 
 	return *iterator;
+}
+
+/**
+ * Checks whether the current player has won the game in a complete straight line based on their last move.
+ *
+ * @param playerType The identifier of the player to check for a straight line for.
+ * @param row Row of the players last move.
+ * @param col Column of the players last move.
+ * @return If a player has won, the players identifier is returned otherwise, 0 is returned.
+ */
+int Board::playerHasStraightLine(int playerType, int row, int col) {
+	switch (playerType) {
+		//Red Player
+		case 1:
+			//Checking cols as the complete lines
+			for (int i = 0; i < boardSize; ++i) {
+				if (grid[i][col] != playerType) {
+					return 0;
+				}
+			}
+			//Will only be reached if the line is all the players type otherwise it returns false above
+			return playerType;
+		//Blue player
+		case -1:
+			//Checking rows as teh complete lines
+			for (int i = 0; i < boardSize; ++i) {
+				if (grid[row][i] != playerType) {
+					return 0;
+				}
+			}
+			//Will only be reached if the line is all the players type otherwise it returns false above
+			return playerType;
+	}
+
+	return false; //Return false by default
 }
 
 void Board::printBoard() {
