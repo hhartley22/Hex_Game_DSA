@@ -8,8 +8,9 @@
 #ifndef BOARD_H_
 #define BOARD_H_
 
-#include <list>
 #include <cstdlib>
+#include <list>
+#include <stack>
 
 #include "Cell.h"
 
@@ -90,6 +91,8 @@ public:
 
 	Cell getPossibleMove();
 
+	stack<Cell> getNeighbours(int playerType, int row, int col);
+
 	int checkWinningStatus(int playerType) {
 		//To be implemented
 		return 0;
@@ -149,6 +152,43 @@ Cell Board::getPossibleMove() {
 	advance(iterator, cellPos);
 
 	return *iterator;
+}
+
+stack<Cell> Board::getNeighbours(int playerType, int row, int col) {
+	stack<Cell> neighbours;
+
+	cout << "Neighbours: " << endl;
+
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			//Bounds checking
+			if (i == -1 && row <= 0) { //No row above
+				continue;
+			} else if (i == 1 && row >= (boardSize-1) ) { //No row below
+				continue;
+			} else if(j == -1 && col <= 0) { //No column to left
+				continue;
+			} else if (j == 1 && col >= (boardSize-1) ) { //No column to right
+				continue;
+			} else if (i == 0 && j == 0) { //Is the cell we want to check for neighbours around
+				continue;
+			}
+
+			//Cells exist but are not considered neighbours in the board shape of a rhombus
+			if (i == -1 && j == -1) {
+				continue;
+			} else if (i == 1 && j == 1) {
+				continue;
+			}
+
+			if (grid[row+i][col+j] == playerType) {
+				cout << "(" << (row + i) + 1 << ", " << (col + j) + 1 << ")" << endl;
+				neighbours.push(Cell{row + i, col + j});
+			}
+		}
+	}
+
+	return neighbours;
 }
 
 /**

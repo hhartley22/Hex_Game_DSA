@@ -45,6 +45,7 @@ void HexGame::play() {
 
 		board->removeEmptyCell(x, y);
 		board->printBoard();
+		board->getNeighbours(playerType, x, y);
 		won = board->checkWinningStatus(playerType);
 
 		if(!won) {
