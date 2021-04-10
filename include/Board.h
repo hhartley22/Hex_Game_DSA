@@ -93,10 +93,7 @@ public:
 
 	stack<Cell> getNeighbours(int playerType, int row, int col);
 
-	int checkWinningStatus(int playerType) {
-		//To be implemented
-		return 0;
-	}
+	int checkWinningStatus(int playerType);
 
 	int playerHasStraightLine(int playerType, int row, int col);
 
@@ -157,8 +154,6 @@ Cell Board::getPossibleMove() {
 stack<Cell> Board::getNeighbours(int playerType, int row, int col) {
 	stack<Cell> neighbours;
 
-	cout << "Neighbours: " << endl;
-
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
 			//Bounds checking
@@ -182,7 +177,6 @@ stack<Cell> Board::getNeighbours(int playerType, int row, int col) {
 			}
 
 			if (grid[row+i][col+j] == playerType) {
-				cout << "(" << (row + i) + 1 << ", " << (col + j) + 1 << ")" << endl;
 				neighbours.push(Cell{row + i, col + j});
 			}
 		}
@@ -224,6 +218,34 @@ int Board::playerHasStraightLine(int playerType, int row, int col) {
 	}
 
 	return false; //Return false by default
+}
+
+int Board::checkWinningStatus(int playerType) {
+
+	stack<Cell> trackingStack;
+	list<Cell> visited;
+
+	if (playerType == 1) {
+		/* Red Player(Vertical) */
+		//Get possible starting nodes
+		for (int i = 0; i < boardSize; ++i) {
+			if (grid[0][i] == playerType) {
+				//Add to list of starting nodes
+				trackingStack.push(Cell{0, i});
+			}
+		}
+	} else if (playerType == -1) {
+		/* Blue Player(Horizontal) */
+		//Get Possible starting nodes
+		for (int i = 0; i < boardSize; ++i) {
+			if (grid[i][0] == playerType) {
+				//Add to list of starting nodes
+				trackingStack.push(Cell{i, 0});
+			}
+		}
+	}
+
+	return 0;
 }
 
 void Board::printBoard() {
