@@ -293,6 +293,10 @@ int Board::checkWinningStatus(int playerType) {
 	return 0;
 }
 
+/**
+ * Function used to print a stack<Node> to the screen for debugging purposes
+ * @param stack Copy of the stack to print to the screen
+ */
 void Board::printStack(stack<Node> stack) {
 	while(!stack.empty()) {
 		cout << stack.top() << endl;
@@ -318,6 +322,12 @@ bool Board::checkNode(int playerType, Node node) {
 	}
 }
 
+/**
+ * Searches list<Nodes> for a passed node object
+ * @param node Copy of node instance to find in list
+ * @param list List to search
+ * @return Boolean value representing the result of the search
+ */
 bool Board::nodeVisited(Node node, list<Node> &list){
 	auto current = list.begin();
 	for (int i = 0; i < list.size(); ++i) {
