@@ -1,6 +1,9 @@
-//
-// Created by Hayden on 1/4/21.
-//
+/*
+ * Cell.h
+ *
+ *  Created on: 01/04/2021
+ *      Author: Hayden Hartley
+ */
 
 #ifndef ASSIGNMENT1_RANDOMPLAYER_H
 #define ASSIGNMENT1_RANDOMPLAYER_H

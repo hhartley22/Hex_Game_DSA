@@ -48,9 +48,10 @@ void HexGame::play() {
 		board->getNeighbours(playerType, x, y);
 		won = board->checkWinningStatus(playerType);
 
+		/*
 		if(!won) {
 			won = board->playerHasStraightLine(playerType, x, y);
-		}
+		} */
 
         if(won == playerType)
         	cout << player[playerIndex]->getPlayerName() << " player wins!" << endl;

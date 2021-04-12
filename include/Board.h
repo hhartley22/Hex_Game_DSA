@@ -13,6 +13,7 @@
 #include <stack>
 
 #include "Cell.h"
+#include "Node.h"
 
 class Board {
 private:
@@ -95,7 +96,13 @@ public:
 
 	int checkWinningStatus(int playerType);
 
+	bool checkNode(int playerType, Node node);
+
+	bool nodeVisited(Node node, list<Node> &list);
+
 	int playerHasStraightLine(int playerType, int row, int col);
+
+	void printStack(stack<Node> stack);
 
 	void printBoard();
 };
@@ -221,31 +228,106 @@ int Board::playerHasStraightLine(int playerType, int row, int col) {
 }
 
 int Board::checkWinningStatus(int playerType) {
+	stack<Node> tree;
+	list<Node> visitedNodes;
 
-	stack<Cell> trackingStack;
-	list<Cell> visited;
-
-	if (playerType == 1) {
-		/* Red Player(Vertical) */
-		//Get possible starting nodes
+	//Get starting nodes
+	if (playerType == 1) { //Red Player (Rows)
+		//Check first row
 		for (int i = 0; i < boardSize; ++i) {
 			if (grid[0][i] == playerType) {
-				//Add to list of starting nodes
-				trackingStack.push(Cell{0, i});
+				tree.push(Node{0, i, true});
 			}
 		}
-	} else if (playerType == -1) {
-		/* Blue Player(Horizontal) */
-		//Get Possible starting nodes
+	} else { //Blue Player (Columns)
+		//Check first column
 		for (int i = 0; i < boardSize; ++i) {
 			if (grid[i][0] == playerType) {
-				//Add to list of starting nodes
-				trackingStack.push(Cell{i, 0});
+				tree.push(Node{i, 0, true});
 			}
 		}
 	}
 
+	while(!tree.empty()) {
+		//Get node to check
+		Node current = tree.top();
+		visitedNodes.push_back(current);
+		tree.top().isBranch = false; //Node is checked so it is no longer marked as a branch
+
+		//Check node status
+		if (checkNode(playerType, current)) {
+			return  playerType;
+		}
+
+		//Get nodes neighbours
+		stack<Cell> neighbours = getNeighbours(playerType, current.x, current.y);
+		int numOfNeighbours = neighbours.size();
+		int neighboursAdded = 0; //Track number of new nodes added to tree
+		while(!neighbours.empty()) {
+			Node neighbour;
+			neighbour.x = neighbours.top().x;
+			neighbour.y = neighbours.top().y;
+			neighbour.isBranch = numOfNeighbours > 1;
+
+			if (!nodeVisited(neighbour, visitedNodes)) {
+				tree.push(neighbour);
+				++neighboursAdded;
+			}
+
+			neighbours.pop();
+		}
+
+		//Backtrack if current node is an end point with no new neighbours
+		if (neighboursAdded == 0) {
+			while (!tree.empty()) {
+				if (!tree.top().isBranch) {
+					tree.pop();
+				} else {
+					break;
+				}
+			}
+		}
+
+	}
+
 	return 0;
+}
+
+void Board::printStack(stack<Node> stack) {
+	while(!stack.empty()) {
+		cout << stack.top() << endl;
+		stack.pop();
+	}
+}
+
+/**
+ * Checks whether the passed node is in a winning position for the player
+ * @param playerType Symbol representing the player
+ * @param node Node object to check for a win using
+ * @return A boolean value representing whether the node represents a winning position
+ */
+bool Board::checkNode(int playerType, Node node) {
+	if(playerType == 1) {
+		if (node.x == boardSize-1) {
+			return true;
+		}
+	} else {
+		if (node.y == boardSize-1) {
+			return true;
+		}
+	}
+}
+
+bool Board::nodeVisited(Node node, list<Node> &list){
+	auto current = list.begin();
+	for (int i = 0; i < list.size(); ++i) {
+		if (node == *current) {
+			return true;
+		}
+		advance(current, 1);
+	}
+
+	return false;
 }
 
 void Board::printBoard() {
