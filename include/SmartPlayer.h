@@ -19,8 +19,8 @@ using namespace std;
 class SmartPlayer : public Player {
 private:
 	int steps;
-	double minMove(Board *board);
-	double maxMove(Board *board);
+	double minMove(Board *board, int level);
+	double maxMove(Board *board, int level);
 	double evaluateBoard(Board *board);
 	bool nodeVisited(Node node, list<Node> &list);
 	void printStack(stack<Node> stack);
@@ -49,8 +49,8 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 					return true;
 				}
 
-				steps = 5;
-				double moveUtility = minMove(&tmpBoard);
+				steps = 3;
+				double moveUtility = minMove(&tmpBoard, steps);
 				Move move{i, j, moveUtility};
 				moves.push(move);
 			} else {
@@ -68,25 +68,24 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 	return true;
 }
 
-double SmartPlayer::maxMove(Board *board) {
-	if (board->isBoardFull() || steps <= 0) {
+double SmartPlayer::maxMove(Board *board, int level) {
+	if (board->isBoardFull() || level <= 0) {
 		return evaluateBoard(board);
 	}
 
-	double maxUtility = -1;
+	double maxUtility = -100;
 
 	for (int i = 0; i < board->getBoardSize(); ++i) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			//Copy board
 			Board tmpBoard(*board);
 			if (tmpBoard.addMove(type ,i, j)) {
-
 				double moveUtility = 0;
-				//If move makes player win then set move
+				//If move makes player win
 				if (tmpBoard.checkWinningStatus(type)) {
-					return 1;
+					return 100;
 				} else {
-					moveUtility = minMove(&tmpBoard);
+					moveUtility = minMove(&tmpBoard, level-1);
 				}
 
 				if (moveUtility > maxUtility) {
@@ -98,29 +97,27 @@ double SmartPlayer::maxMove(Board *board) {
 		}
 	}
 
-	steps--;
 	return maxUtility;
 }
 
-double SmartPlayer::minMove(Board *board) {
-	if (board->isBoardFull() || steps <= 0) {
+double SmartPlayer::minMove(Board *board, int level) {
+	if (board->isBoardFull() || level <= 0) {
 		return evaluateBoard(board);
 	}
 
-	double minUtility = 2;
+	double minUtility = 100;
 
 	for (int i = 0; i < board->getBoardSize(); ++i) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			//Copy board
 			Board tmpBoard(*board);
 			if (tmpBoard.addMove(type*-1 ,i, j)) {
-
 				double moveUtility = 0;
-				//If move makes player win then set move
+				//If move makes player win
 				if (tmpBoard.checkWinningStatus(type*-1)) {
 					return -1;
 				} else {
-					moveUtility = maxMove(&tmpBoard);
+					moveUtility = maxMove(&tmpBoard, level-1);
 				}
 
 				if (moveUtility < minUtility) {
@@ -132,30 +129,54 @@ double SmartPlayer::minMove(Board *board) {
 		}
 	}
 
-	steps--;
 	return minUtility;
 }
 
 double SmartPlayer::evaluateBoard(Board *board) {
 	stack<Node> tree;
 	list<Node> nodesSeen;
-	int longestLineSize = 0;
-	int currentLineLength = 0;
+	int largestDistanceCovered = 0;
 
 	for (int i = 0; i < board->getBoardSize(); ++i) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			if (board->getGrid(i, j) == type) {
 				Node current = Node{i, j, false};
+
 				if (!nodeVisited(current, nodesSeen)) {
-					//Get length of line
 					tree.push(current);
-					currentLineLength = 1;
+					int lowestCell;
+					int highestCell;
+
+					if (type == 1) {
+						lowestCell = current.x;
+						highestCell = current.x;
+					} else {
+						lowestCell = current.y;
+						highestCell = current.y;
+					}
 
 					while(!tree.empty()) {
 						Node top = tree.top();
 						nodesSeen.push_back(top);
 						tree.top().isBranch = false;
-						currentLineLength++;
+
+						if (type == 1) {
+							if (top.x < lowestCell) {
+								lowestCell = top.x;
+							}
+							if (top.x > highestCell) {
+								highestCell = top.x;
+							}
+
+						} else {
+							if (top.y < lowestCell) {
+								lowestCell = top.y;
+							}
+							if (top.y > highestCell) {
+								highestCell = top.y;
+							}
+						}
+
 
 						//Get Neighbours
 						stack<Cell> neighbours = board->getNeighbours(type, top.x, top.y);
@@ -170,23 +191,20 @@ double SmartPlayer::evaluateBoard(Board *board) {
 								tree.push(neighbour);
 								neighboursAdded++;
 							}
-
 							neighbours.pop();
 						}
 
-						//printStack(tree);
-						//cout << endl;
 
 						//Backtrack if current node is an end point with no new neighbours
 						if (neighboursAdded == 0) {
-							if (currentLineLength > longestLineSize) {
-								longestLineSize = currentLineLength;
+							int distanceCovered = ((highestCell - lowestCell));
+							if (distanceCovered > largestDistanceCovered) {
+								largestDistanceCovered = distanceCovered;
 							}
 
 							while(!tree.empty()) {
 								if (!tree.top().isBranch) {
 									tree.pop();
-									currentLineLength--;
 								} else {
 									break;
 								}
@@ -198,8 +216,9 @@ double SmartPlayer::evaluateBoard(Board *board) {
 		}
 	}
 
-	//Heuristic value of the size of the longest line as a percentage of the boardsize
-	return (double)longestLineSize / board->getBoardSize();
+//Heuristic value of the size of the longest line as a percentage of the boardsize
+	return largestDistanceCovered;
+
 }
 
 void SmartPlayer::printStack(stack<Node> stack) {
