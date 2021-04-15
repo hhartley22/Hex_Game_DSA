@@ -10,6 +10,8 @@
 
 #include <ostream>
 
+using namespace std;
+
 struct Cell {
 	int x;
 	int y;

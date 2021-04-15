@@ -1,5 +1,5 @@
 /*
- * Cell.h
+ * RandomPlayer.h
  *
  *  Created on: 01/04/2021
  *      Author: Hayden Hartley
@@ -18,11 +18,11 @@ using namespace std;
 
 class RandomPlayer : public Player {
 public:
-	RandomPlayer(int t, string name = "Random");
+	RandomPlayer(int type, string name = "Random");
 	bool getMove(Board *board, int &x, int &y) override;
 };
 
-RandomPlayer::RandomPlayer(int t, string name) : Player(t, name) {
+RandomPlayer::RandomPlayer(int type, string name) : Player(type, name) {
 	//Empty Constructor
 }
 

@@ -9,13 +9,14 @@
 #include <ctime>
 #include <cstdlib>
 
-using namespace std;
-
 #include "Board.h"
 #include "Player.h"
 #include "HumanPlayer.h"
 #include "HexGame.h"
 #include "RandomPlayer.h"
+#include "SmartPlayer.h"
+
+using namespace std;
 
 int main() {
 	srand(time(0));
@@ -28,7 +29,7 @@ int main() {
 	Board *board = new Board(boardSize);
 
 	Player *p1 = new HumanPlayer(1, "Human (Red)");
-	Player *p2 = new RandomPlayer(-1, "Random (Blue)");
+	Player *p2 = new SmartPlayer(-1, "Smart (Blue)");
 
 	HexGame game(board, p1, p2);
 	game.play();
