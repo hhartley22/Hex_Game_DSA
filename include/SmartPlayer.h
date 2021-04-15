@@ -41,7 +41,8 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			//Copy board
 			Board tmpBoard(*board);
-			if (tmpBoard.addMove(type ,i, j)) {
+			if (tmpBoard.getGrid(i,j) == 0) {
+				tmpBoard.addMove(type ,i, j);
 				//If move makes player win then set move
 				if (tmpBoard.checkWinningStatus(type)) {
 					x = i;
@@ -49,7 +50,7 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 					return true;
 				}
 
-				steps = 3;
+				steps = 4;
 				double moveUtility = minMove(&tmpBoard, steps);
 				Move move{i, j, moveUtility};
 				moves.push(move);
@@ -79,7 +80,8 @@ double SmartPlayer::maxMove(Board *board, int level) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			//Copy board
 			Board tmpBoard(*board);
-			if (tmpBoard.addMove(type ,i, j)) {
+			if (board->getGrid(i, j) == 0) {
+				tmpBoard.addMove(type ,i, j);
 				double moveUtility = 0;
 				//If move makes player win
 				if (tmpBoard.checkWinningStatus(type)) {
@@ -111,7 +113,8 @@ double SmartPlayer::minMove(Board *board, int level) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
 			//Copy board
 			Board tmpBoard(*board);
-			if (tmpBoard.addMove(type*-1 ,i, j)) {
+			if (board->getGrid(i, j) == 0) {
+				tmpBoard.addMove(type*-1 ,i, j);
 				double moveUtility = 0;
 				//If move makes player win
 				if (tmpBoard.checkWinningStatus(type*-1)) {
@@ -137,52 +140,57 @@ double SmartPlayer::evaluateBoard(Board *board) {
 	list<Node> nodesSeen;
 	int largestDistanceCovered = 0;
 
-	for (int i = 0; i < board->getBoardSize(); ++i) {
+	//Loop over all board locations
+	for(int i = 0; i < board->getBoardSize(); ++i) {
 		for (int j = 0; j < board->getBoardSize(); ++j) {
+			//If location has players identifier in it
 			if (board->getGrid(i, j) == type) {
-				Node current = Node{i, j, false};
+				Node currentPos = Node{i,j, false};
 
-				if (!nodeVisited(current, nodesSeen)) {
-					tree.push(current);
+				//If node has not been visited yet
+				if (!nodeVisited(currentPos, nodesSeen)) {
+					tree.push(currentPos);
+
+					//Set up heuristic parameters
 					int lowestCell;
 					int highestCell;
 
 					if (type == 1) {
-						lowestCell = current.x;
-						highestCell = current.x;
+						lowestCell = currentPos.x;
+						highestCell = currentPos.x;
 					} else {
-						lowestCell = current.y;
-						highestCell = current.y;
+						lowestCell = currentPos.y;
+						highestCell = currentPos.y;
 					}
 
+					//Search tree
 					while(!tree.empty()) {
-						Node top = tree.top();
-						nodesSeen.push_back(top);
+						Node currentTop = tree.top();
+						nodesSeen.push_back(currentTop);
 						tree.top().isBranch = false;
 
+						//Compare against heuristic parameters
 						if (type == 1) {
-							if (top.x < lowestCell) {
-								lowestCell = top.x;
+							if (currentTop.x < lowestCell) {
+								lowestCell = currentTop.x;
 							}
-							if (top.x > highestCell) {
-								highestCell = top.x;
+							if (currentTop.x > highestCell) {
+								highestCell = currentTop.x;
 							}
-
 						} else {
-							if (top.y < lowestCell) {
-								lowestCell = top.y;
+							if (currentTop.y < lowestCell) {
+								lowestCell = currentTop.y;
 							}
-							if (top.y > highestCell) {
-								highestCell = top.y;
+							if (currentTop.y > highestCell) {
+								highestCell = currentTop.y;
 							}
 						}
 
-
-						//Get Neighbours
-						stack<Cell> neighbours = board->getNeighbours(type, top.x, top.y);
+						//Get neighbours and expand
+						stack<Cell> neighbours = board->getNeighbours(type, currentTop.x, currentTop.y);
 						int numOfNeighbours = neighbours.size();
 						int neighboursAdded = 0;
-						for (int k = 0; k < numOfNeighbours; ++k) {
+						while(!neighbours.empty()) {
 							Node neighbour;
 							neighbour.x = neighbours.top().x;
 							neighbour.y = neighbours.top().y;
@@ -194,14 +202,15 @@ double SmartPlayer::evaluateBoard(Board *board) {
 							neighbours.pop();
 						}
 
-
-						//Backtrack if current node is an end point with no new neighbours
+						//Node is a leaf node
 						if (neighboursAdded == 0) {
-							int distanceCovered = ((highestCell - lowestCell));
+							//Calculate heuristic value
+							int distanceCovered = (highestCell - lowestCell) + 1;
 							if (distanceCovered > largestDistanceCovered) {
 								largestDistanceCovered = distanceCovered;
 							}
 
+							//Backtrack
 							while(!tree.empty()) {
 								if (!tree.top().isBranch) {
 									tree.pop();
@@ -210,15 +219,16 @@ double SmartPlayer::evaluateBoard(Board *board) {
 								}
 							}
 						}
+
+
 					}
 				}
+
 			}
 		}
 	}
 
-//Heuristic value of the size of the longest line as a percentage of the boardsize
 	return largestDistanceCovered;
-
 }
 
 void SmartPlayer::printStack(stack<Node> stack) {

@@ -28,8 +28,8 @@ int main() {
 
 	Board *board = new Board(boardSize);
 
-	Player *p1 = new HumanPlayer(1, "Human (Red)");
-	Player *p2 = new SmartPlayer(-1, "Smart (Blue)");
+	Player *p1 = new SmartPlayer(1, "Smart (Red)");
+	Player *p2 = new SmartPlayer(-1, "Human (Blue)");
 
 	HexGame game(board, p1, p2);
 	game.play();

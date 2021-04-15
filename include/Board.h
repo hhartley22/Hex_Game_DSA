@@ -129,7 +129,7 @@ bool Board::addMove(int playerType, int x, int y) {
 	}
 
 	if (grid[x][y] != 0) {
-		//cout << "Invalid move. The cell has been occupied." << endl;
+		cout << "Invalid move. The cell has been occupied." << endl;
 		return false;
 	}
 
