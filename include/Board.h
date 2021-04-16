@@ -104,6 +104,8 @@ public:
 
 	void printStack(stack<Node> stack);
 
+	bool cellIsEmpty(int x, int y);
+
 	void printBoard();
 };
 
@@ -134,6 +136,7 @@ bool Board::addMove(int playerType, int x, int y) {
 	}
 
 	grid[x][y] = playerType;
+	removeEmptyCell(x, y);
 
 	turn = -1 * turn;
 	return true;
@@ -340,6 +343,10 @@ bool Board::nodeVisited(Node node, list<Node> &list){
 	}
 
 	return false;
+}
+
+bool Board::cellIsEmpty(int x, int y) {
+	return grid[x][y] == 0;
 }
 
 void Board::printBoard() {

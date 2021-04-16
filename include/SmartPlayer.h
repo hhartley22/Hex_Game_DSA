@@ -26,7 +26,7 @@ private:
 	void printStack(stack<Node> stack);
 public:
 	SmartPlayer(int type, string playerName = "Smart");
-	bool getMove(Board *board, int &x, int &y);
+	bool getMove(Board *board, int &x, int &y) override;
 };
 
 SmartPlayer::SmartPlayer(int type, string playerName) : Player(type, playerName) {
@@ -50,7 +50,7 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 					return true;
 				}
 
-				steps = 4;
+				steps = 3;
 				double moveUtility = minMove(&tmpBoard, steps);
 				Move move{i, j, moveUtility};
 				moves.push(move);
@@ -116,7 +116,7 @@ double SmartPlayer::minMove(Board *board, int level) {
 			if (board->getGrid(i, j) == 0) {
 				tmpBoard.addMove(type*-1 ,i, j);
 				double moveUtility = 0;
-				//If move makes player win
+				//If move makes opponent win
 				if (tmpBoard.checkWinningStatus(type*-1)) {
 					return -1;
 				} else {
@@ -205,7 +205,7 @@ double SmartPlayer::evaluateBoard(Board *board) {
 						//Node is a leaf node
 						if (neighboursAdded == 0) {
 							//Calculate heuristic value
-							int distanceCovered = (highestCell - lowestCell) + 1;
+							int distanceCovered = (highestCell - lowestCell);
 							if (distanceCovered > largestDistanceCovered) {
 								largestDistanceCovered = distanceCovered;
 							}

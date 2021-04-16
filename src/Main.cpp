@@ -15,6 +15,7 @@
 #include "HexGame.h"
 #include "RandomPlayer.h"
 #include "SmartPlayer.h"
+#include "MonteCarloPlayer.h"
 
 using namespace std;
 
@@ -28,8 +29,8 @@ int main() {
 
 	Board *board = new Board(boardSize);
 
-	Player *p1 = new SmartPlayer(1, "Smart (Red)");
-	Player *p2 = new SmartPlayer(-1, "Human (Blue)");
+	Player *p1 = new HumanPlayer(1, "Human (Red)");
+	Player *p2 = new MonteCarloPlayer(-1, "MonteCarlo (Blue)");
 
 	HexGame game(board, p1, p2);
 	game.play();
