@@ -1,6 +1,9 @@
-//
-// Created by Hayden on 15/4/21.
-//
+/*
+ * MiniMaxPlayer.h
+ *
+ *  Created on: 15/04/2021
+ *      Author: Hayden Hartley
+ */
 
 #ifndef ASSIGNMENT1_MONTECARLOPLAYER_H
 #define ASSIGNMENT1_MONTECARLOPLAYER_H

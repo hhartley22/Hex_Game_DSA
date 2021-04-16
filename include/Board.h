@@ -14,6 +14,7 @@
 
 #include "Cell.h"
 #include "Node.h"
+#include "GenericFunctions.h"
 
 class Board {
 private:
@@ -21,6 +22,8 @@ private:
 	int turn;
 	int **grid;
 	list<Cell> emptyCells;
+
+	bool checkNode(int playerType, Node node);
 public:
 	Board(int bs) {
 		boardSize = bs;
@@ -96,13 +99,7 @@ public:
 
 	int checkWinningStatus(int playerType);
 
-	bool checkNode(int playerType, Node node);
-
-	bool nodeVisited(Node node, list<Node> &list);
-
 	int playerHasStraightLine(int playerType, int row, int col);
-
-	void printStack(stack<Node> stack);
 
 	bool cellIsEmpty(int x, int y);
 
@@ -272,7 +269,7 @@ int Board::checkWinningStatus(int playerType) {
 			neighbour.y = neighbours.top().y;
 			neighbour.isBranch = numOfNeighbours > 1;
 
-			if (!nodeVisited(neighbour, visitedNodes)) {
+			if (!searchList(neighbour, visitedNodes)) {
 				tree.push(neighbour);
 				++neighboursAdded;
 			}
@@ -297,17 +294,6 @@ int Board::checkWinningStatus(int playerType) {
 }
 
 /**
- * Function used to print a stack<Node> to the screen for debugging purposes
- * @param stack Copy of the stack to print to the screen
- */
-void Board::printStack(stack<Node> stack) {
-	while(!stack.empty()) {
-		cout << stack.top() << endl;
-		stack.pop();
-	}
-}
-
-/**
  * Checks whether the passed node is in a winning position for the player
  * @param playerType Symbol representing the player
  * @param node Node object to check for a win using
@@ -322,24 +308,6 @@ bool Board::checkNode(int playerType, Node node) {
 		if (node.y == boardSize-1) {
 			return true;
 		}
-	}
-
-	return false;
-}
-
-/**
- * Searches list<Nodes> for a passed node object
- * @param node Copy of node instance to find in list
- * @param list List to search
- * @return Boolean value representing the result of the search
- */
-bool Board::nodeVisited(Node node, list<Node> &list){
-	auto current = list.begin();
-	for (int i = 0; i < list.size(); ++i) {
-		if (node == *current) {
-			return true;
-		}
-		advance(current, 1);
 	}
 
 	return false;

@@ -1,11 +1,11 @@
 /*
- * SmartPlayer.h
+ * MiniMaxPlayer.h
  *
  *  Created on: 13/04/2021
  *      Author: Hayden Hartley
  */
-#ifndef ASSIGNMENT1_SMARTPLAYER_H
-#define ASSIGNMENT1_SMARTPLAYER_H
+#ifndef ASSIGNMENT1_MINIMAXPLAYER_H
+#define ASSIGNMENT1_MINIMAXPLAYER_H
 
 #include <queue>
 #include <stack>
@@ -13,28 +13,33 @@
 #include "Move.h"
 #include "Node.h"
 #include "Cell.h"
+#include "GenericFunctions.h"
 
 using namespace std;
 
-class SmartPlayer : public Player {
+class MiniMaxPlayer : public Player {
 private:
 	int steps;
 	double minMove(Board *board, int level);
 	double maxMove(Board *board, int level);
 	double evaluateBoard(Board *board);
-	bool nodeVisited(Node node, list<Node> &list);
-	void printStack(stack<Node> stack);
 public:
-	SmartPlayer(int type, string playerName = "Smart");
+	MiniMaxPlayer(int type, string playerName = "MiniMax");
 	bool getMove(Board *board, int &x, int &y) override;
 };
 
-SmartPlayer::SmartPlayer(int type, string playerName) : Player(type, playerName) {
+MiniMaxPlayer::MiniMaxPlayer(int type, string playerName) : Player(type, playerName) {
 	//EMPTY CONSTRUCTOR
 }
 
-bool SmartPlayer::getMove(Board *board, int &x, int &y) {
-
+/**
+ * Get players move
+ * @param board Pointer to a board object.
+ * @param x Integer object to store the moves x value in.
+ * @param y Integer object to store the moves y value in.
+ * @return A boolean value representing whether a move was chosen successfully
+ */
+bool MiniMaxPlayer::getMove(Board *board, int &x, int &y) {
 	priority_queue<Move> moves;
 
 	for (int i = 0; i < board->getBoardSize(); ++i) {
@@ -69,7 +74,14 @@ bool SmartPlayer::getMove(Board *board, int &x, int &y) {
 	return true;
 }
 
-double SmartPlayer::maxMove(Board *board, int level) {
+/**
+ * Maximising Step of the MiniMax Algorithm. Chooses the highest utility out of the returned values. Represents the
+ * players move.
+ * @param board Pointer to a board to play on
+ * @param level The amount of remaining levels to traverse before evaluating game state
+ * @return A double representing the highest utility seen
+ */
+double MiniMaxPlayer::maxMove(Board *board, int level) {
 	if (board->isBoardFull() || level <= 0) {
 		return evaluateBoard(board);
 	}
@@ -102,7 +114,14 @@ double SmartPlayer::maxMove(Board *board, int level) {
 	return maxUtility;
 }
 
-double SmartPlayer::minMove(Board *board, int level) {
+/**
+ * Minimising Step of the MiniMax Algorithm. Chooses the lowest utility out of the returned values. Represents
+ * opponents move.
+ * @param board Pointer to a board to play on
+ * @param level The amount of remaining levels to traverse before evaluating game state
+ * @return A double representing the lowest utility seen
+ */
+double MiniMaxPlayer::minMove(Board *board, int level) {
 	if (board->isBoardFull() || level <= 0) {
 		return evaluateBoard(board);
 	}
@@ -135,7 +154,12 @@ double SmartPlayer::minMove(Board *board, int level) {
 	return minUtility;
 }
 
-double SmartPlayer::evaluateBoard(Board *board) {
+/**
+ * Evaluate the board state and return a value representing how advantageous the boards current state is to the player.
+ * @param board A pointer to a board representing the current board state
+ * @return A double representing the
+ */
+double MiniMaxPlayer::evaluateBoard(Board *board) {
 	stack<Node> tree;
 	list<Node> nodesSeen;
 	int largestDistanceCovered = 0;
@@ -148,7 +172,7 @@ double SmartPlayer::evaluateBoard(Board *board) {
 				Node currentPos = Node{i,j, false};
 
 				//If node has not been visited yet
-				if (!nodeVisited(currentPos, nodesSeen)) {
+				if (!searchList(currentPos, nodesSeen)) {
 					tree.push(currentPos);
 
 					//Set up heuristic parameters
@@ -195,7 +219,7 @@ double SmartPlayer::evaluateBoard(Board *board) {
 							neighbour.x = neighbours.top().x;
 							neighbour.y = neighbours.top().y;
 							neighbour.isBranch = numOfNeighbours > 1;
-							if (!nodeVisited(neighbour, nodesSeen)) {
+							if (!searchList(neighbour, nodesSeen)) {
 								tree.push(neighbour);
 								neighboursAdded++;
 							}
@@ -205,7 +229,7 @@ double SmartPlayer::evaluateBoard(Board *board) {
 						//Node is a leaf node
 						if (neighboursAdded == 0) {
 							//Calculate heuristic value
-							int distanceCovered = (highestCell - lowestCell);
+							int distanceCovered = (highestCell - lowestCell) + 1;
 							if (distanceCovered > largestDistanceCovered) {
 								largestDistanceCovered = distanceCovered;
 							}
@@ -230,23 +254,4 @@ double SmartPlayer::evaluateBoard(Board *board) {
 
 	return largestDistanceCovered;
 }
-
-void SmartPlayer::printStack(stack<Node> stack) {
-	while(!stack.empty()) {
-		cout << stack.top() << endl;
-		stack.pop();
-	}
-}
-
-bool SmartPlayer::nodeVisited(Node node, list<Node> &list){
-	auto current = list.begin();
-	for (int i = 0; i < list.size(); ++i) {
-		if (node == *current) {
-			return true;
-		}
-		advance(current, 1);
-	}
-
-	return false;
-}
-#endif //ASSIGNMENT1_SMARTPLAYER_H
+#endif //ASSIGNMENT1_MINIMAXPLAYER_H
