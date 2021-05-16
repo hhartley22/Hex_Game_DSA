@@ -1,0 +1,3 @@
+Lost marks for possible looping in checkWinningStatus. Work on preventing this looping in free time. (Lost 3 marks)
+
+Total: 97% - 14.55/15
