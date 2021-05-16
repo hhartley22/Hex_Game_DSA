@@ -26,6 +26,13 @@ RandomPlayer::RandomPlayer(int type, string name) : Player(type, name) {
 	//Empty Constructor
 }
 
+/**
+ * Get player move
+ * @param board Pointer to board representing the current game state
+ * @param x Address of integer variable to store the moves x pos in
+ * @param y Address of integer variable to store the moves y pos in
+ * @return Boolean value representing the whether a move was retrieved successfully
+ */
 bool RandomPlayer::getMove(Board *board, int &x, int &y) {
 	Cell cell = board->getPossibleMove();
 

@@ -15,12 +15,12 @@
 #include "Board.h"
 #include "Move.h"
 
-#define NUM_OF_SIMS 2000
+#define NUM_OF_SIMS 1000
 
 class MonteCarloPlayer : public Player {
 private:
 	double simulate(Board *board, int player);
-	double expand(Board board, int player);
+	int expand(Board board, int player);
 public:
 	MonteCarloPlayer(int type, string name);
 	bool getMove(Board *board, int &x, int &y) override;
@@ -31,6 +31,13 @@ MonteCarloPlayer::MonteCarloPlayer(int type, string name) : Player(type, name){
 	//EMPTY CONSTRUCTOR
 }
 
+/**
+ * Get move of player.
+ * @param board Pointer to Board representing the current game state.
+ * @param x Address of an integer to store the x position of the move.
+ * @param y Address of an integer to store the x position of the move.
+ * @return Boolean value representing whether a move was retrieved successfully.
+ */
 bool MonteCarloPlayer::getMove(Board *board, int &x, int &y) {
 
 	priority_queue<Move> moves;
@@ -70,6 +77,12 @@ bool MonteCarloPlayer::getMove(Board *board, int &x, int &y) {
 	return true;
 }
 
+/**
+ * Simulate game.
+ * @param board Pointer to Board representing the beginning state of the simulation
+ * @param player Integer representing the current player who's move it is.
+ * @return A double representing frequency of player wins.
+ */
 double MonteCarloPlayer::simulate(Board *board, int player) {
 
 	if (player == 1) {
@@ -87,12 +100,18 @@ double MonteCarloPlayer::simulate(Board *board, int player) {
 	return utilityTotal / NUM_OF_SIMS;
 }
 
-double MonteCarloPlayer::expand(Board board, int player) {
+/**
+ * Expand on the current board state of the simulation
+ * @param board Current state of the board.
+ * @param player Integer representing the player who's move it currently is.
+ * @return A integer representing whether the player has won or lost the current simulation.
+ */
+int MonteCarloPlayer::expand(Board board, int player) {
 	//Get Board State
 	if (board.checkWinningStatus(type)) { //Win
 		return 1;
 	} else if(board.checkWinningStatus(type*-1)){ //Loss
-		return -1;
+		return 0;
 	}
 
 	//Add Move
@@ -106,7 +125,7 @@ double MonteCarloPlayer::expand(Board board, int player) {
 		player = 1;
 	}
 
-	return expand(board, player*-1);
+	return expand(board, player);
 }
 
 #endif //ASSIGNMENT1_MONTECARLOPLAYER_H

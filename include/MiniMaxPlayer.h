@@ -156,8 +156,8 @@ double MiniMaxPlayer::minMove(Board *board, int level) {
 
 /**
  * Evaluate the board state and return a value representing how advantageous the boards current state is to the player.
- * @param board A pointer to a board representing the current board state
- * @return A double representing the
+ * @param board A pointer to a board representing the current board state.
+ * @return A double representing the utility of the move.
  */
 double MiniMaxPlayer::evaluateBoard(Board *board) {
 	stack<Node> tree;
@@ -252,6 +252,6 @@ double MiniMaxPlayer::evaluateBoard(Board *board) {
 		}
 	}
 
-	return largestDistanceCovered;
+	return (double)largestDistanceCovered / board->getBoardSize();
 }
 #endif //ASSIGNMENT1_MINIMAXPLAYER_H

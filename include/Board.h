@@ -139,16 +139,28 @@ bool Board::addMove(int playerType, int x, int y) {
 	return true;
 }
 
-//Removes a cell from the emptyCells member
+/**
+ * Remove an cell from the empty cell list data member
+ * @param x The x pos of the cell
+ * @param y The y pos of the cell
+ */
 void Board::removeEmptyCell(int x, int y) {
 	emptyCells.remove(Cell{x, y});
 }
 
+/**
+ * Check if the board is full
+ * @return Boolean representing whether the board is full
+ */
 bool Board::isBoardFull() {
 	return !(emptyCells.size());
 }
 
 //Returns a random empty Cell from the remaining empty board cells
+/**
+ * Get a possible playable move by getting a random empty cell.
+ * @return A Cell object representing the possible move.
+ */
 Cell Board::getPossibleMove() {
 	int cellPos = rand() % emptyCells.size();
 
@@ -158,6 +170,13 @@ Cell Board::getPossibleMove() {
 	return *iterator;
 }
 
+/**
+ * Get all neighbouring cells that belong to the specified player.
+ * @param playerType Integer representing the player.
+ * @param row The row of the cell to check the neighbours of.
+ * @param col The column of the cell to check the neighbours of.
+ * @return A stack of Cell objects representing the neighbouring cells owned by the player.
+ */
 stack<Cell> Board::getNeighbours(int playerType, int row, int col) {
 	stack<Cell> neighbours;
 
@@ -212,6 +231,7 @@ int Board::playerHasStraightLine(int playerType, int row, int col) {
 			}
 			//Will only be reached if the line is all the players type otherwise it returns false above
 			return playerType;
+
 		//Blue player
 		case -1:
 			//Checking rows as teh complete lines
@@ -227,6 +247,11 @@ int Board::playerHasStraightLine(int playerType, int row, int col) {
 	return false; //Return false by default
 }
 
+/**
+ * Check whether the specified player has met winning conditions.
+ * @param playerType Integer representing the player to check the winning conditions for.
+ * @return If passed player has won returns the value used to represent that player, otherwise returns 0.
+ */
 int Board::checkWinningStatus(int playerType) {
 	stack<Node> tree;
 	list<Node> visitedNodes;
